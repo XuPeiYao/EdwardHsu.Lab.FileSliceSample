@@ -27,6 +27,10 @@ namespace EdwardHsu.Lab.FileSliceSample
         private StreamSlicer(StreamSlicer streamSlicer)
         {
             self = streamSlicer;
+            _offset = self._offset;
+            _stream = self._stream;
+            _buffer = self._buffer;
+            _usedBufferSize = self._usedBufferSize;
         }
 
         public StreamSlicer(Stream stream, int bufferSize = 1024 * 4)
@@ -38,20 +42,20 @@ namespace EdwardHsu.Lab.FileSliceSample
         public bool MoveNext()
         {
             LoadSlice();
-            self._offset += self._buffer.Length;
-            return self._usedBufferSize > 0;
+            _offset += _buffer.Length;
+            return _usedBufferSize > 0;
         }
 
         public void Reset()
         {
-            self._offset = 0;
+            _offset = 0;
             LoadSlice();
         }
 
         private void LoadSlice()
         {
-            self._stream.Seek(self._offset, SeekOrigin.Begin);
-            self._usedBufferSize = self._stream.Read(self._buffer, 0, self._buffer.Length);
+            _stream.Seek(_offset, SeekOrigin.Begin);
+            _usedBufferSize = _stream.Read(_buffer, 0, _buffer.Length);
         }
 
         public void Dispose()
@@ -62,7 +66,7 @@ namespace EdwardHsu.Lab.FileSliceSample
             }
             else
             {
-                self._offset = 0;
+                _offset = 0;
             }
         }
 

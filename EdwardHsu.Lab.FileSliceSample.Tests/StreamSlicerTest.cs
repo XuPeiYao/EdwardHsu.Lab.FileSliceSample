@@ -10,19 +10,18 @@ namespace EdwardHsu.Lab.FileSliceSample.Tests
         [Fact]
         public void Test1()
         {
-            using (var file = System.IO.File.Open(
+            using var file = System.IO.File.Open(
                 @"C:\Users\XuPeiYao\Downloads\book.png",
-                System.IO.FileMode.Open))
+                System.IO.FileMode.Open);
+
+            using var slicer = new StreamSlicer(file);
+
+            foreach (var item in slicer)
             {
-                using (var slicer = new StreamSlicer(file))
-                {
-                    foreach (var item in slicer)
-                    {
-                        Console.WriteLine(item.Length);
-                    }
-                    Assert.Equal(slicer.Count(), Math.Ceiling(file.Length / 4096M));
-                }
+                Console.WriteLine(item.Length);
             }
+
+            Assert.Equal(slicer.Count(), Math.Ceiling(file.Length / 4096M));
         }
     }
 }
